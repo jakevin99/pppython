@@ -17,75 +17,176 @@ Toy is a simple, dynamically-typed programming language with the following featu
 9. **Error Handling**: Robust error handling and debugging capabilities.
 10. **Extensibility**: Add new features through plugins and extensions.
 
-## Language Syntax Examples
+## Getting Started
 
-### Variables & Arithmetic
+### Installation
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/jakevin99/pppython.git
+   cd pppython
+   ```
+
+2. Make sure you have Python 3.6+ installed:
+   ```
+   python --version
+   ```
+
+3. No additional dependencies are required to run the basic interpreter.
+
+### Running Your First Toy Program
+
+1. Create a file called `hello.toy` with the following content:
+   ```
+   // My first Toy program
+   print("Hello, Toy World!");
+   ```
+
+2. Run the program using the interpreter:
+   ```
+   python main.py hello.toy
+   ```
+
+### Using the Interactive Mode
+
+Start the interactive REPL (Read-Eval-Print Loop) to try out Toy commands directly:
+```
+python main.py
+```
+
+This allows you to type Toy code line by line and see immediate results.
+
+## Language Usage Guide
+
+### Syntax Basics
+
+All statements in Toy end with a semicolon (`;`). Comments start with `//` and continue to the end of the line.
+
+### Variables & Types
+
+Toy is dynamically typed. Variables are declared using the `let` keyword:
 
 ```
-let x = 10;
-let y = 5;
-print("x + y = " + (x + y));  // 15
+let name = "Alice";
+let age = 30;
+let is_student = true;
+let gpa = 3.8;
+```
+
+Supported types include:
+- Strings (enclosed in double quotes)
+- Numbers (integers and floats)
+- Booleans (`true` and `false`)
+- `null` (represents absence of value)
+
+### Operators
+
+Toy supports the following operators:
+
+- **Arithmetic**: `+`, `-`, `*`, `/`, `%` (modulo)
+- **Comparison**: `==`, `!=`, `<`, `>`, `<=`, `>=`
+- **Logical**: `and`, `or`, `not`
+- **Assignment**: `=`
+
+String concatenation uses the `+` operator:
+```
+let greeting = "Hello, " + name + "!";
 ```
 
 ### Control Flow
 
+#### If-Else Statements
+
 ```
-if (x > y) {
-    print("x is greater than y");
+if (condition) {
+    // code to execute if condition is true
+} else if (another_condition) {
+    // code to execute if another_condition is true
 } else {
-    print("x is not greater than y");
+    // code to execute if all conditions are false
 }
 ```
 
-### Loops
+#### While Loops
 
 ```
-let i = 0;
-while (i < 3) {
-    print("Count: " + i);
-    i = i + 1;
+while (condition) {
+    // code to execute repeatedly while condition is true
+}
+```
+
+#### Repeat Statements
+
+Execute a block of code a specific number of times:
+```
+repeat 5 times {
+    // code to execute 5 times
 }
 ```
 
 ### Functions
 
+Define functions with the `function` keyword:
+
 ```
-function greet(name) {
-    print("Hello, " + name + "!");
+function add(a, b) {
+    return a + b;
 }
 
-greet("World");  // Hello, World!
+// Call the function
+let result = add(5, 3);
+print(result);  // Output: 8
 ```
 
-### Classes & OOP
+Functions without a return statement will return `null`.
+
+### Object-Oriented Programming
+
+Toy supports classes and objects:
 
 ```
-class Person {
-    greet() {
-        print("My name is " + this.name);
+class Rectangle {
+    init(width, height) {
+        this.width = width;
+        this.height = height;
+    }
+    
+    area() {
+        return this.width * this.height;
     }
 }
 
-let person = new Person();
-person.name = "Alice";
-person.greet();  // My name is Alice
+// Create an instance
+let rect = new Rectangle(5, 10);
+print(rect.area());  // Output: 50
 ```
 
-### Repeat Statement
+Notes on classes:
+- The `init` method is called when creating a new instance
+- Use `this` to refer to the current instance
+- Methods don't need the `function` keyword
+- Create instances with the `new` keyword
 
-```
-repeat 3 times {
-    print("Hello!");
-}
-```
+### Concurrency
 
-### Parallel Execution
+Run code blocks in parallel:
 
 ```
 parallel {
-    print("This runs in parallel");
-    print("With this");
+    // These statements run concurrently
+    print("Task 1 running");
+    print("Task 2 running");
 }
+```
+
+### Memory Management
+
+Toy handles memory automatically, but you can explicitly delete variables:
+
+```
+let temp = "temporary data";
+// ... use temp ...
+delete temp;  // Explicitly remove the variable
 ```
 
 ## Running the Interpreter
@@ -105,6 +206,13 @@ python main.py
 ```
 python main.py --debug <script_file>
 ```
+
+## Examples
+
+Look at the example files in the repository to see Toy in action:
+- `test.toy`: Basic language features
+- `simple_test.toy`: Simple examples of each language construct 
+- `final_test.toy`: Comprehensive test of all language features
 
 ## Extensions
 
