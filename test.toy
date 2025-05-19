@@ -1,0 +1,59 @@
+// Test file for Toy language
+
+// Simple variable declaration and arithmetic
+let x = 10;
+let y = 5;
+print("x = " + x + ", y = " + y);
+print("x + y = " + (x + y));
+print("x - y = " + (x - y));
+print("x * y = " + (x * y));
+print("x / y = " + (x / y));
+
+// Control flow
+print("\nControl flow:");
+if (x > y) {
+    print("x is greater than y");
+} else {
+    print("x is not greater than y");
+}
+
+// Loop
+print("\nLoop:");
+let i = 0;
+while (i < 3) {
+    print("i = " + i);
+    i = i + 1;
+}
+
+// Function
+print("\nFunction:");
+function square(n) {
+    return n * n;
+}
+
+print("square(4) = " + square(4));
+
+// Lambda function
+print("\nLambda function:");
+function add(a, b) {
+    return a + b;
+}
+print("add(3, 7) = " + add(3, 7));
+
+// Class and OOP
+print("\nObject-oriented programming:");
+class Person {
+    greet() {
+        print("Hello, my name is " + this.name);
+    }
+}
+
+let person = new Person();
+person.name = "Alice";
+person.greet();
+
+// Repeat syntax
+print("\nRepeat syntax:");
+repeat 3 times {
+    print("Hi!");
+} 

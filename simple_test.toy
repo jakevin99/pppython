@@ -1,0 +1,38 @@
+// Simple test for Toy language
+
+// Variables
+let x = 10;
+let y = 5;
+print("x = " + x);
+print("y = " + y);
+
+// Arithmetic
+print("x + y = " + (x + y));
+print("x - y = " + (x - y));
+
+// Control flow
+if (x > y) {
+    print("x is greater than y");
+} else {
+    print("x is NOT greater than y");
+}
+
+// Loop
+let i = 0;
+while (i < 3) {
+    print("i = " + i);
+    i = i + 1;
+}
+
+// Parallel execution
+print("Starting parallel execution:");
+parallel {
+    print("This runs in parallel 1");
+    print("This runs in parallel 2");
+}
+
+// Repeat
+print("Repeat test:");
+repeat 3 times {
+    print("Hello!");
+} 

@@ -1,0 +1,74 @@
+// Toy Language Demo
+
+// 1. Variables & Arithmetic
+print("=== Variables & Arithmetic ===");
+let x = 10;
+let y = 5;
+print("x = " + x + ", y = " + y);
+print("x + y = " + (x + y));
+print("x - y = " + (x - y));
+print("x * y = " + (x * y));
+print("x / y = " + (x / y));
+
+// 2. Control Flow
+print("=== Control Flow ===");
+if (x > y) {
+    print("Condition true: x is greater than y");
+} else {
+    print("Condition false: x is NOT greater than y");
+}
+
+// 3. Loops
+print("=== Loops ===");
+print("While loop counting to 3:");
+let i = 0;
+while (i < 3) {
+    print("  Count: " + i);
+    i = i + 1;
+}
+
+// 4. Functions
+print("=== Functions ===");
+function greet(name) {
+    print("Hello, " + name + "!");
+}
+
+greet("World");
+
+// 5. Classes and OOP
+print("=== Classes & OOP ===");
+class Person {
+    greet() {
+        let name = "Anonymous";
+        let age = 0;
+        
+        if (this.name != null) {
+            name = this.name;
+        }
+        
+        if (this.age != null) {
+            age = this.age;
+        }
+        
+        print("My name is " + name + " and I am " + age + " years old.");
+    }
+}
+
+let person = new Person();
+person.name = "Alice";
+person.age = 30;
+person.greet();
+
+// 6. Repeat statement
+print("=== Repeat Statement ===");
+print("Repeating 3 times:");
+repeat 3 times {
+    print("  Hello!");
+}
+
+// 7. Parallel Execution
+print("=== Parallel Execution ===");
+parallel {
+    print("This runs in parallel (Thread 1)");
+    print("With this (Thread 2)");
+} 
