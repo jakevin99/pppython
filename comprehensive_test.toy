@@ -1,0 +1,137 @@
+// Comprehensive test file for Toy language
+
+// ==== 1. Lexical Analysis Tests ====
+print("=== 1. Lexical Analysis Tests ===");
+
+// 1.1 Tokenizer Correctness
+let x = 10 + 5;
+print("1.1 Tokenizer Correctness: " + x);
+
+// 1.2 Error Handling - this would trigger a lexical error if uncommented
+// let y = 10 @ 5;
+// Define y for later use
+let y = 10;
+
+// 1.3 Efficiency - comments and whitespace
+let z = 15;  // this is a comment
+print("1.3 Efficiency (comments): " + z);
+
+// ==== 2. Syntax Analysis Tests ====
+print("\n=== 2. Syntax Analysis Tests ===");
+
+// 2.1 Parser Correctness
+if (x > 5) {
+    print("2.1 Parser Correctness: x is greater than 5");
+}
+
+// 2.2 AST Generation
+let complex = x + (y * z) / 2;
+print("2.2 AST Generation: " + complex);
+
+// 2.3 Error Handling - this would trigger a syntax error if uncommented
+// if x > 5 { print("Missing parentheses"); }
+
+// ==== 3. Semantic Analysis Tests ====
+print("\n=== 3. Semantic Analysis Tests ===");
+
+// 3.1 Symbol Table Management
+let redeclare = 10;
+// This will trigger a redeclaration warning
+let redeclare = 15;
+print("3.1 Symbol Table Management: " + redeclare);
+
+// 3.2 Type Checking
+// This will trigger a type error
+// let typeError = "hi" + 5;
+print("3.2 Type Checking: " + "hi" + " (string)");
+
+// 3.3 Error Detection
+// This would trigger a semantic error if uncommented
+// print(undefinedVar);
+
+// ==== 4. Execution and Evaluation Tests ====
+print("\n=== 4. Execution and Evaluation Tests ===");
+
+// 4.1 Expression Evaluation
+print("4.1 Expression Evaluation: " + (2 * (3 + 4)));
+
+// 4.2 Control Structures
+print("4.2 Control Structures:");
+{
+    let i = 0;
+    while (i < 3) {
+        print("i = " + i);
+        i = i + 1;
+    }
+}
+
+// 4.3 Function Execution
+function square(num) {
+    return num * num;
+}
+print("4.3 Function Execution: square(5) = " + square(5));
+
+// 4.4 CLI/REPL Support is tested via the command line interface
+
+// ==== 5. Memory Management Tests ====
+print("\n=== 5. Memory Management Tests ===");
+
+// 5.1 Variable Lifecycle
+let lifecycle = 5;
+lifecycle = 6;
+print("5.1 Variable Lifecycle: " + lifecycle);
+
+// 5.2 GC / Manual Memory
+let array = [1, 2, 3];
+array = null;
+print("5.2 Memory Management: array set to null");
+
+// 5.3 Access to Deleted Object - this would cause an error if uncommented
+// delete(array);
+// print(array[0]);
+
+// ==== 6. Error Handling and Debugging Tests ====
+print("\n=== 6. Error Handling and Debugging Tests ===");
+
+// 6.1 Runtime Errors - this would cause an error if uncommented
+// let divByZero = 10 / 0;
+
+// 6.2 Debugging Feedback
+// let typeError = "hi" + 5;  // Would show line number in error
+
+// ==== 7. User Interface / CLI Tests ====
+print("\n=== 7. User Interface / CLI Tests ===");
+print("7.1 Usability: Basic CLI working");
+// 7.2-7.4 are tested via command line args
+
+// ==== 8. Advanced Features Tests ====
+print("\n=== 8. Advanced Features Tests ===");
+
+// 8.1 Object-Oriented Support
+print("8.1 Object-Oriented Support:");
+class Person {
+    greet() {
+        print("Hello, my name is " + this.name);
+    }
+}
+let p = new Person();
+p.name = "Alice";
+p.greet();
+
+// 8.2 Lambda Functions
+print("8.2 Lambda Functions:");
+let square = (x) => x * x;
+print("Lambda square(4): " + square(4));
+
+// 8.3 Concurrency
+print("8.3 Concurrency:");
+parallel {
+    print("This runs in parallel");
+    print("With this line");
+}
+
+// 8.4 Extensibility
+print("8.4 Extensibility:");
+repeat 3 times {
+    print("Hi!");
+} 

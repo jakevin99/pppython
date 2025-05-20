@@ -1,4 +1,38 @@
-from execution_evaluation import Environment, RuntimeError
+class RuntimeError(Exception):
+    """Exception for runtime errors."""
+    pass
+
+class Environment:
+    """Environment for storing variable bindings."""
+    def __init__(self, enclosing=None):
+        self.values = {}
+        self.enclosing = enclosing
+    
+    def define(self, name, value):
+        """Define a new variable in the current environment."""
+        self.values[name] = value
+    
+    def get(self, name):
+        """Get a variable value from the environment."""
+        if name in self.values:
+            return self.values[name]
+        
+        if self.enclosing is not None:
+            return self.enclosing.get(name)
+        
+        raise RuntimeError(f"Undefined variable '{name}'.")
+    
+    def assign(self, name, value):
+        """Assign a new value to an existing variable."""
+        if name in self.values:
+            self.values[name] = value
+            return
+        
+        if self.enclosing is not None:
+            self.enclosing.assign(name, value)
+            return
+        
+        raise RuntimeError(f"Undefined variable '{name}'.")
 
 class MemoryManager:
     """Memory manager for tracking variable lifecycle and garbage collection."""
@@ -88,15 +122,24 @@ class EnhancedEnvironment(Environment):
     def __init__(self, enclosing=None):
         super().__init__(enclosing)
         self.memory_manager = MemoryManager()
+        self.deleted_variables = set()  # Track explicitly deleted variables
     
     def define(self, name, value):
         """Define a new variable with memory management."""
+        # Clear deleted status if variable is being redefined
+        if name in self.deleted_variables:
+            self.deleted_variables.remove(name)
+            
         # Store the value and track it
         super().define(name, value)
         self.memory_manager.allocate(value)
     
     def assign(self, name, value):
         """Assign a new value with memory management."""
+        # Check if the variable has been deleted
+        if name in self.deleted_variables:
+            raise RuntimeError(f"Cannot assign to deleted variable '{name}'.")
+            
         # Check if variable exists
         if name in self.values:
             # Track the assignment
@@ -116,10 +159,14 @@ class EnhancedEnvironment(Environment):
     def delete(self, name):
         """Delete a variable from the environment."""
         if name in self.values:
+            # Add to deleted list
+            self.deleted_variables.add(name)
+            
             # Remove from memory manager
             self.memory_manager.delete(id(name))
-            # Remove from environment
-            del self.values[name]
+            
+            # Set to null instead of removing completely
+            self.values[name] = None
             return
         
         if self.enclosing is not None:
@@ -131,12 +178,15 @@ class EnhancedEnvironment(Environment):
     
     def get(self, name):
         """Get a variable value with deletion check."""
-        # Check if the variable exists and hasn't been deleted
+        # Check if the variable has been explicitly deleted
+        if name in self.deleted_variables:
+            raise RuntimeError(f"Access to deleted variable '{name}'.")
+            
+        # Check if the variable exists
         if name in self.values:
-            if not self.memory_manager.is_deleted(id(name)):
-                return super().get(name)
-            else:
+            if self.memory_manager.is_deleted(id(name)):
                 raise RuntimeError(f"Access to deleted variable '{name}'.")
+            return super().get(name)
         
         if self.enclosing is not None:
             return self.enclosing.get(name)
@@ -174,6 +224,16 @@ def test_memory_management():
         env.define("obj", {"data": "test"})
         env.delete("obj")
         print(f"Trying to access deleted object: {env.get('obj')}")
+    except RuntimeError as error:
+        print(f"Error (expected): {error}")
+        
+    # Test 4: Delete array and try to access index
+    print("\nTest 4 - Access to Deleted Array")
+    try:
+        env.define("arr", [1, 2, 3])
+        print(f"Original array: {env.get('arr')}")
+        env.delete("arr")
+        print(f"Trying to access deleted array index: {env.get('arr')[0]}")
     except RuntimeError as error:
         print(f"Error (expected): {error}")
 

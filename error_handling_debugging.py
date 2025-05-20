@@ -156,10 +156,17 @@ class ErrorHandler:
     def handle_division_by_zero(self, line=None):
         """Handle a division by zero error."""
         self.handle_runtime_error("Division by zero", line)
+        # Return a specific error message matching what's expected in the requirements
+        return "Error: division by zero"
     
-    def handle_type_error(self, expected, got, line=None):
+    def handle_type_error(self, expected, got, operation=None, line=None):
         """Handle a type error."""
-        self.handle_runtime_error(f"Type error: expected {expected}, got {got}", line)
+        msg = f"Type error: expected {expected}, got {got}"
+        if operation:
+            msg += f" for operation '{operation}'"
+        self.handle_runtime_error(msg, line)
+        # Return a helpful message for display
+        return f"Error: cannot {operation} {got} and {expected}" if operation else msg
 
 def test_error_handling():
     error_handler = ErrorHandler()
@@ -171,7 +178,8 @@ def test_error_handling():
         y = 0
         result = x / y  # This will cause a division by zero
     except ZeroDivisionError:
-        error_handler.handle_division_by_zero(line=3)
+        error_msg = error_handler.handle_division_by_zero(line=3)
+        print(error_msg)
     
     # Test 2: Debugging Feedback
     print("\nTest 2 - Debugging Feedback")
@@ -186,6 +194,8 @@ def test_error_handling():
     token = FakeToken("PLUS", "+", 5)
     error_handler.debugger.set_source("let x = \"hi\" + 5;")
     error_handler.handle_syntax_error(token, "Cannot add string and number")
+    error_msg = error_handler.handle_type_error("string", "number", "add", 5)
+    print(error_msg)
 
 if __name__ == "__main__":
     test_error_handling()

@@ -96,9 +96,17 @@ class ToyLanguageCLI:
         if self.verbose_mode and statements:
             print("Syntax tree created successfully")
         
-        # Skip semantic analysis for now
+        # Semantic analysis
+        semantic_errors = self.analyzer.analyze(statements)
+        if semantic_errors:
+            print("Semantic errors:")
+            for error in semantic_errors:
+                print(f"  {error}")
+            # We don't return an error code here, as we want to try executing anyway
+            # Some semantic warnings might not be fatal
+        
         if self.verbose_mode:
-            print("Skipping semantic analysis")
+            print("Semantic analysis complete")
         
         # Execution
         success = self.interpreter.interpret(statements)

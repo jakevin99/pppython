@@ -162,6 +162,8 @@ class Lexer:
         elif c == '=':
             if self.match('='):
                 self.add_token(TokenType.EQUAL)
+            elif self.match('>'):
+                self.add_token(TokenType.ARROW)
             else:
                 self.add_token(TokenType.ASSIGN)
         elif c == '!':

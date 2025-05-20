@@ -348,8 +348,43 @@ class Parser:
     def expression(self):
         """Parse an expression."""
         # Check for lambda expressions
-        if self.check(TokenType.LEFT_PAREN) and self.check_next(TokenType.IDENTIFIER):
-            return self.lambda_expr()
+        if self.check(TokenType.LEFT_PAREN) and self.check_ahead(1, TokenType.IDENTIFIER):
+            # Peek ahead to see if this might be a lambda
+            saved_position = self.current
+            try:
+                # Try to parse as a lambda
+                self.advance()  # Consume the '('
+                if not self.check(TokenType.IDENTIFIER):
+                    # Not a lambda, rollback and continue
+                    self.current = saved_position
+                    return self.assignment()
+                
+                # Keep advancing through parameter list
+                self.advance()  # Consume identifier
+                while self.match(TokenType.COMMA):
+                    if not self.check(TokenType.IDENTIFIER):
+                        # Invalid parameter list, not a lambda
+                        self.current = saved_position
+                        return self.assignment()
+                    self.advance()  # Consume identifier
+                
+                if not self.match(TokenType.RIGHT_PAREN):
+                    # No closing parenthesis, not a lambda
+                    self.current = saved_position
+                    return self.assignment()
+                
+                if not self.check(TokenType.ARROW):
+                    # No arrow, not a lambda
+                    self.current = saved_position
+                    return self.assignment()
+                
+                # This looks like a lambda, rewind and parse properly
+                self.current = saved_position
+                return self.lambda_expr()
+            except:
+                # If anything went wrong, roll back and try normal expression
+                self.current = saved_position
+                return self.assignment()
         
         return self.assignment()
     
@@ -488,6 +523,17 @@ class Parser:
             return Literal(None)
         if self.match(TokenType.THIS):
             return Variable(self.previous())
+        if self.match(TokenType.LEFT_BRACKET):
+            # Handle array literals [1, 2, 3]
+            elements = []
+            
+            if not self.check(TokenType.RIGHT_BRACKET):
+                elements.append(self.expression())
+                while self.match(TokenType.COMMA):
+                    elements.append(self.expression())
+            
+            self.consume(TokenType.RIGHT_BRACKET, "Expect ']' after array elements.")
+            return Literal(elements)
         
         raise self.error(self.peek(), "Expect expression.")
     
@@ -579,6 +625,12 @@ class Parser:
                 return
             
             self.advance()
+
+    def check_ahead(self, offset, type):
+        """Check the token at the current position + offset."""
+        if self.current + offset >= len(self.tokens):
+            return False
+        return self.tokens[self.current + offset].type == type
 
 class ParseError(Exception):
     """Exception for parsing errors."""
